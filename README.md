@@ -8,7 +8,7 @@ prepared_data - folder with fragment of NASA dataset for evaluation
 
 Convert_NASA_Data_to_Orion_Format.ipynb - notebook for downloading NASA dataset (code from: https://github.com/sintel-dev/Orion)
 
-PrepareData.ipynb - notebook for converting fragement of NASA dataset to the appropriate format
+PrepareData.ipynb - notebook for converting fragment of NASA dataset to the appropriate format
 
 labels.csv - folder with anomaly labels for NASA dataset
 
