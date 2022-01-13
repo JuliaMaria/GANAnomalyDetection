@@ -1,5 +1,9 @@
 # GANAnomalyDetection
 
+BenchmarkingResults.ipynb - notebook with summary of the benchmarking performance on fragment of NASA dataset
+
+benchmarking_results - folder with results of the benchmarking performance on fragment of NASA dataset
+
 model_training - folder with code for model training, anomaly detection and main pipeline (code from: https://github.com/arunppsg/TadGAN)
 
 models - folder with trained models
@@ -12,4 +16,4 @@ PrepareData.ipynb - notebook for converting fragment of NASA dataset to the appr
 
 labels.csv - folder with anomaly labels for NASA dataset
 
-Results-A-5.txt - file with evaluation results for A-5 fragment of NASA dataset
+
