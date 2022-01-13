@@ -1,15 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-import os
-import logging
-import numpy as np
-
-import torch
 import torch.nn as nn
-import torch.optim as optim
-from torch.autograd import Variable
-from torch.utils.data import Dataset, DataLoader
+
 
 class Encoder(nn.Module):
 
@@ -26,6 +16,7 @@ class Encoder(nn.Module):
         x = self.dense(x)
         return (x)
 
+
 class Decoder(nn.Module):
     def __init__(self, decoder_path, signal_shape=100):
         super(Decoder, self).__init__()
@@ -38,6 +29,7 @@ class Decoder(nn.Module):
         x, (hn, cn) = self.lstm(x)
         x = self.dense(x)
         return (x)
+
 
 class CriticX(nn.Module):
     def __init__(self, critic_x_path, signal_shape=100):
@@ -52,6 +44,7 @@ class CriticX(nn.Module):
         x = self.dense1(x)
         x = self.dense2(x)
         return (x)
+
 
 class CriticZ(nn.Module):
     def __init__(self, critic_z_path):

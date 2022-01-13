@@ -1,11 +1,12 @@
 import numpy as np
+import pandas as pd
 from scipy import stats
 
 import torch
 from tqdm import tqdm
 
 
-def test(test_loader, encoder, decoder, critic_x):
+def test(test_loader, encoder, decoder, critic_x, dataset_idx=None):
     reconstruction_error = list()
     critic_score = list()
     y_true = list()
@@ -26,9 +27,10 @@ def test(test_loader, encoder, decoder, critic_x):
     anomaly_score = reconstruction_error * critic_score
     y_predict = detect_anomaly(anomaly_score)
     y_predict = prune_false_positive(y_predict, anomaly_score, change_threshold=0.1)
-    find_scores(y_true, y_predict)
+    find_scores(y_true, y_predict, dataset_idx)
 
-#Other error metrics - point wise difference, Area difference.
+
+# Other error metrics - point wise difference, Area difference.
 def dtw_reconstruction_error(x, x_):
     n, m = x.shape[0], x_.shape[0]
     dtw_matrix = np.zeros((n+1, m+1))
@@ -45,16 +47,17 @@ def dtw_reconstruction_error(x, x_):
             dtw_matrix[i, j] = cost + last_min
     return dtw_matrix[n][m]
 
+
 def unroll_signal(x):
     x = np.array(x).reshape(100)
     return np.median(x)
 
+
 def prune_false_positive(is_anomaly, anomaly_score, change_threshold):
-    #The model might detect a high number of false positives.
-    #In such a scenario, pruning of the false positive is suggested.
-    #Method used is as described in the Section 5, part D Identifying Anomalous
-    #Sequence, sub-part - Mitigating False positives
-    #TODO code optimization
+    # The model might detect a high number of false positives.
+    # In such a scenario, pruning of the false positive is suggested.
+    # Method used is as described in the Section 5, part D Identifying Anomalous
+    # Sequence, sub-part - Mitigating False positives
     seq_details = []
     delete_sequence = 0
     start_position = 0
@@ -80,20 +83,21 @@ def prune_false_positive(is_anomaly, anomaly_score, change_threshold):
     max_elements = np.array(max_elements)
     change_percent = abs(max_elements[1:] - max_elements[:-1]) / max_elements[1:]
 
-    #Appending 0 for the 1 st element which is not change percent
+    # Appending 0 for the 1 st element which is not change percent
     delete_seq = np.append(np.array([0]), change_percent < change_threshold)
 
-    #Mapping max element and seq details
+    # Mapping max element and seq details
     for i, max_elt in enumerate(max_elements):
         for j in range(0, len(seq_details)):
             if seq_details[j][2] == max_elt:
                 seq_details[j][3] = delete_seq[i]
 
     for seq in seq_details:
-        if seq[3] == 1: #Delete sequence
+        if seq[3] == 1: # Delete sequence
             is_anomaly[seq[0]:seq[1]+1] = [0] * (seq[1] - seq[0] + 1)
  
     return is_anomaly
+
 
 def detect_anomaly(anomaly_score):
     window_size = len(anomaly_score) // 3
@@ -114,7 +118,8 @@ def detect_anomaly(anomaly_score):
 
     return is_anomaly
 
-def find_scores(y_true, y_predict):
+
+def find_scores(y_true, y_predict, dataset_idx=None):
     tp = tn = fp = fn = 0
 
     for i in range(0, len(y_true)):
@@ -127,7 +132,12 @@ def find_scores(y_true, y_predict):
         elif y_true[i] == 0 and y_predict[i] == 1:
             fp += 1
 
-    print ('Accuracy {:.2f}'.format((tp + tn)/(len(y_true))))
+    if len(y_true) != 0:
+        accuracy = (tp + tn)/(len(y_true))
+    else:
+        accuracy = 0
+
+    print('Accuracy {:.2f}'.format(accuracy))
 
     if (tp + fp) != 0:
         precision = tp / (tp + fp)
@@ -139,6 +149,16 @@ def find_scores(y_true, y_predict):
     else:
         recall = 0
 
-    print ('Precision {:.2f}'.format(precision))
-    print ('Recall {:.2f}'.format(recall))
-    print ('F1 Score {:.2f}'.format(2 * precision * recall / (precision + recall)))
+    print('Precision {:.2f}'.format(precision))
+    print('Recall {:.2f}'.format(recall))
+
+    if (precision + recall) != 0:
+        f1 = 2 * precision * recall / (precision + recall)
+    else:
+        f1 = 0
+
+    print('F1 Score {:.2f}'.format(f1))
+
+    results = [[accuracy, precision, recall, f1]]
+    results = pd.DataFrame(results, columns=['accuracy', 'precision', 'recall', 'f1'])
+    results.to_csv(f'../benchmarking_results/results-{dataset_idx}.csv')
