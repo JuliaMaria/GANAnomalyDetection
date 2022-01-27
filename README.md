@@ -23,7 +23,7 @@ Training TadGAN on 'Ambient temperature system failure':
 
 datasets - folder with 'Ambient temperature System Failure' benchmarking dataset (data from: https://github.com/numenta/NAB/blob/master/data/realKnownCause/ambient_temperature_system_failure.csv)
 
-model.py, interface.py, anomaly_detection.py - code for model structure, training and anomaly detection for TadGAN model with LSTM (code from: https://github.com/arunppsg/TadGAN)
+model.py, interface.py, anomaly_detection.py, utils.py - code for model structure, training, anomaly detection and dataset utils functions for TadGAN model with LSTM (code from: https://github.com/arunppsg/TadGAN)
 
 model_transformer.py - code for TadGAN model with transformer
 
@@ -33,6 +33,6 @@ results - plots showing original and reconstructed signal for TadGAN model with 
 
 training_transformer.ipynb - notebook with training pipeline and evaluation for TadGAN model with transformer
 
-statistics.ipynb - notebook with training and evaluation statistics for TadGAN models with LSTM and with transformer
+evaluation_statistics.ipynb - notebook with training and evaluation statistics for TadGAN models with LSTM and with transformer
 
 
