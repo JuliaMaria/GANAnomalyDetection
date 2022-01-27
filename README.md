@@ -17,26 +17,16 @@ Podsumowując dotychczasową pracę wykonałyśmy następujące kroki:
 
 # Contents
 
-BenchmarkingResults.ipynb - notebook with summary of the benchmarking performance on fragment of NASA dataset
+Training TadGAN on 'Ambient temperature system failure':
 
-benchmarking_results - folder with results of the benchmarking performance on fragment of NASA dataset
+datasets - folder with temperature benchmarking dataset
 
-model_training - folder with code for model training, anomaly detection and main pipeline (code from: https://github.com/arunppsg/TadGAN)
+model.py, interface.py, anomaly_detection.py - code for model structure, training and anomaly detection for TadGAN model with LSTM (code from: https://github.com/arunppsg/TadGAN)
 
-models - folder with trained models
+train_temperature.ipynb - notebook with training pipeline and evaluation for TadGAN model with LSTM
 
-Convert_NASA_Data_to_Orion_Format.ipynb - notebook for downloading NASA dataset (code from: https://github.com/sintel-dev/Orion)
+results - plots showing original and reconstructed signal for TadGAN model with LSTM
 
-PrepareData.ipynb - notebook for converting fragment of NASA dataset to the appropriate format
-
-prepared_data - folder with fragment of NASA dataset for evaluation
-
-labels.csv - folder with anomaly labels for NASA dataset
-
-count_reconstructed_error - folder with training TadGAN on 'Ambient temperature system failure'
-
-count_reconstructed_error/train_temperature - notebook with training pipeline and evaluation
-
-count_reconstructed_error/results - plots showing original and reconstructed signal
+model_transformer.py - code for TadGAN model with transformer
 
 
